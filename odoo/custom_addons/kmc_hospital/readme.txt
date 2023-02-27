@@ -1,1 +1,0 @@
-Based on Odoo, Version 16.0 Basic Hospital Management System
