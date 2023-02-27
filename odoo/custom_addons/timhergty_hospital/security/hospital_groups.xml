@@ -1,1 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
 
+        <record id="bi_group_doctor" model="res.groups">
+            <field name="name">Doctor</field>
+            <field name="comment">the user will have access to his own data in the Doctor.</field>
+        </record>
+
+        <record id="group_chemist" model="res.groups">
+            <field name="name">Chemist</field>
+            <field name="comment">the user will have access to his own data in the Chemist.</field>
+        </record>
+
+        <record id="group_hospital_group" model="res.groups">
+            <field name="name">Hospital Group</field>
+            <field name="comment">the user will have access to his own data in the Hospital Group.</field>
+        </record>
+
+        <record id="group_receptionist" model="res.groups">
+            <field name="name">Receptionist</field>
+            <field name="comment">the user will have access to his own data in the Receptionist.</field>
+        </record>
+        <record id="group_super_user" model="res.groups">
+            <field name="name">Super User</field>
+            <field name="comment">The Super User will have access to his own data in the Superuser.</field>
+        </record>
+
+    </data>
+</odoo>
