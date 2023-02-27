@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hospital_inpatient_registration_form_view" model="ir.ui.view">
+        <field name="name">hospital.inpatient.registration.form.view</field>
+        <field name="model">hospital.inpatient.registration</field>
+        <field name="arch" type="xml">
+            <form string="Inpatient Registration Information">
+                <header>
+                    <button name="registration_confirm"
+                            states="free" string="Confirm Registration" class="oe_highlight"
+                            type="object"/>
+                    <button name="registration_cancel"
+                            states="confirmed" class="oe_highlight" string="Cancel Registration"
+                            type="object"/>
+                    <button name="registration_admission"
+                            states="confirmed" class="oe_highlight" string="Patient Admission"
+                            type="object"/>
+                    <button name="patient_discharge" states="hospitalized" class="oe_highlight"
+                            string="Discharge Patient"
+                            type="object"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="free,confirmed,cancelled,hospitalized"
+                           readonly="1"/>
+                </header>
+                <sheet>
+                    <group string="Administrative Data">
+                        <group>
+                            <field name="name" required="1"/>
+                            <field name="patient_id" required="1"/>
+
+                            <field name="hospitalization_date"
+                                   required="1"/>
+                            <field name="discharge_date"
+                                   required="1"/>
+                        </group>
+                        <group>
+                            <field name="attending_physician_id"/>
+                            <field name="operating_physician_id"/>
+                            <field name="admission_type"
+                                   required="1"/>
+                            <field name="hospital_pathology_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="info"/>
+                    </group>
+                    <group colspan="4" col="4">
+                        <field name="bed_transfers_ids"
+                               colspan="4">
+                            <tree editable="bottom">
+                                <field name="date"/>
+                                <field name="bed_from"/>
+                                <field name="bed_to"/>
+                                <field name="reason"/>
+                            </tree>
+                        </field>
+                    </group>
+                    <group string="Care Plan">
+                        <field name="nursing_plan"/>
+                        <field name="discharge_plan"/>
+                    </group>
+                </sheet>
+            </form>
+
+        </field>
+    </record>
+
+    <record id="hospital_inpatient_registration_tree_view" model="ir.ui.view">
+        <field name="name">hospital.inpatient.registration.tree.view</field>
+        <field name="model">hospital.inpatient.registration</field>
+        <field name="arch" type="xml">
+            <tree
+                    string="Inpatient Registration Info">
+                <field name="name"/>
+                <field name="patient_id"/>
+                <field name="hospitalization_date"/>
+                <field name="discharge_date"/>
+                <field name="admission_type"/>
+                <field name="state"/>
+            </tree>
+
+        </field>
+    </record>
+
+    <!--    INpatient Graph View-->
+    <record id="hospital_inpatient_registration_graph_view" model="ir.ui.view">
+        <field name="name">hospital.inpatient.registration.graph.view</field>
+        <field name="model">hospital.inpatient.registration</field>
+        <field name="arch" type="xml">
+            <graph string="In Patient Graph" type="pie">
+                <field name="name"/>
+                <field name="patient_id"/>
+                <field name="hospitalization_date"/>
+                <field name="discharge_date"/>
+                <field name="admission_type"/>
+                <field name="state"/>
+            </graph>
+        </field>
+    </record>
+
+    <!--   Pivot-->
+    <record id="hospital_inpatient_registration_pivot_view" model="ir.ui.view">
+        <field name="name">hospital.inpatient.registration.pivot.view</field>
+        <field name="model">hospital.inpatient.registration</field>
+        <field name="arch" type="xml">
+            <pivot string="Patient Information">
+                <field name="patient_id" type="row"/>
+                <field name="name"/>
+                <field name="patient_id"/>
+                <field name="hospitalization_date"/>
+                <field name="discharge_date"/>
+                <field name="admission_type"/>
+                <field name="state"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!--   Kanban-->
+    <record id="hospital_inpatient_registration_kanban_view" model="ir.ui.view">
+        <field name="name">hospital.inpatient.registration.kanban.view</field>
+        <field name="model">hospital.inpatient.registration</field>
+        <field name="priority">10</field>
+        <field name="arch" type="xml">
+            <kanban class="o_hospital_inpatient_registration_kanban" js_class="hospital_inpatient_registration_kanban"
+                    sample="1"
+                    default_group_by="state">
+                <field name="name"/>
+                <field name="patient_id"/>
+                <field name="hospitalization_date"/>
+                <field name="discharge_date"/>
+                <field name="admission_type"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="kanban-box">
+
+                        <div class="oe_kanban_details">
+                            <div class="o_kanban_record_top">
+                                <div class="o_kanban_record_headings">
+                                    <strong class="o_kanban_record_title">
+                                        <field name="patient_id"/>
+                                    </strong>
+                                    <div class="o_kanban_tags_section"/>
+                                    <ul>
+                                        <li>
+                                            <field name="name"/>
+                                        </li>
+                                        <li>
+                                            <field name="patient_id"/>
+                                        </li>
+                                        <li>
+                                            <field name="hospitalization_date"/>
+                                        </li>
+                                        <li>
+                                            <field name="discharge_date"/>
+                                        </li>
+                                        <li>
+                                            <field name="admission_type"/>
+                                        </li>
+                                        <li>
+                                            <field name="state"/>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="action_hospital_inpatient_registration" model="ir.actions.act_window">
+        <field name="name">Patient Hospitalization</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hospital.inpatient.registration</field>
+        <field name="binding_view_types">form</field>
+        <field name="view_mode">tree,form,graph,kanban,pivot</field>
+    </record>
+
+
+    <menuitem
+            id="menu_ss_hospitalization_administration"
+            parent="menu_inpatient_administration"
+            action="action_hospital_inpatient_registration"
+            sequence="0"/>
+
+</odoo>

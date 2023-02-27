@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="hospital_appointment_form_view" model="ir.ui.view">
+        <field name="name">hospital.appointment.form.view</field>
+        <field name="model">hospital.appointment</field>
+        <field name="arch" type="xml">
+            <form string="Appointment">
+                <header>
+                    <button
+                            name="%(timhergty_hospital.action_hospital_appointments_invoice_wizard)d"
+                            string="Create Invoice" type="action" class="oe_highlight"/>
+                </header>
+                <sheet>
+                    <group>
+                        <div class="oe_left" style="width: 500px;">
+                            <div class="oe_title" style="width: 390px;">
+                                <label class="oe_edit_only" for="name"
+                                       string="Appointment #"/>
+                                <h1>
+                                    <field name="name" class="oe_inline"/>
+                                </h1>
+                                <label for="patient_id" class="oe_edit_only"/>
+                                <field name="patient_id"
+                                       context="{'appointment_id': 'appointment'}"
+                                       options="{&quot;always_reload&quot;: 1}"/>
+                            </div>
+                        </div>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="doctor_id"/>
+                            <field name="appointment_date"/>
+                            <field name="appointment_end"/>
+                            <field name="patient_status"/>
+                            <field name="no_invoice"/>
+                            <field name="validity_status"
+                                   readonly="1"/>
+                            <field name="appointment_validity_date"/>
+                        </group>
+                        <group>
+                            <field name="institution_partner_id"/>
+                            <field name="inpatient_registration_id"/>
+                            <field name="duration"/>
+                            <field name="urgency_level"/>
+                            <field name="invoice_to_insurer"/>
+                            <field name="insurer_id"
+                                   attrs="{'invisible': [('invoice_to_insurer','=', False)]}"/>
+                            <field name="consultations_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Comments">
+                            <group>
+                                <field name="comments" nolabel="1" colspan="2"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"
+                           groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+
+        </field>
+    </record>
+
+    <record id="hospital_appointment_tree_view" model="ir.ui.view">
+        <field name="name">hospital.appointment.tree.view</field>
+        <field name="model">hospital.appointment</field>
+        <field name="arch" type="xml">
+            <tree string="Appointment Information">
+                <field name="name"/>
+                <field name="patient_id"/>
+                <field name="patient_status"/>
+                <field name="urgency_level"/>
+                <field name="appointment_date"/>
+                <field name="appointment_end"/>
+                <field name="doctor_id"/>
+                <field name="institution_partner_id"/>
+            </tree>
+        </field>
+    </record>
+
+<!--    other added Views, graph, Kanban, Pivot-->
+    <record id="hospital_appointment_pivot_view" model="ir.ui.view">
+        <field name="name">hospital.appointment.pivot.view</field>
+        <field name="model">hospital.appointment</field>
+        <field name="arch" type="xml">
+            <pivot string="Appointment">
+                <field name="doctor_id" type="row"/>
+                <field name="appointment_date" type="col" interval="day"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="hospital_appointment_calendar_view" model="ir.ui.view">
+        <field name="name">hospital.appointment.calendar.view</field>
+        <field name="model">hospital.appointment</field>
+        <field name="arch" type="xml">
+            <calendar string="Appointment Calendar" date_start="appointment_date" color="doctor_id" mode="month"
+                      quick_add="True">
+                <field name="patient_id"/>
+                <field name="doctor_id"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record id="hospital_appointment_graph_view" model="ir.ui.view">
+        <field name="name">hospital.appointment.graph.view</field>
+        <field name="model">hospital.appointment</field>
+        <field name="arch" type="xml">
+            <graph string="Appointment Graph" type="pie">
+                <field name="patient_id"/>
+                <field name="is_invoiced"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="hospital_appointment_kanban_view" model="ir.ui.view">
+        <field name="name">hospital.appointment.kanban.view</field>
+        <field name="model">hospital.appointment</field>
+        <field name="priority">10</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="institution_partner_id">
+                <field name="patient_id"/>
+                <field name="patient_status"/>
+                <field name="urgency_level"/>
+                <field name="doctor_id"/>
+                <field name="institution_partner_id"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="oe_kanban_image">
+                                <!--                                <field name="user_id" widget="image"/>-->
+                            </div>
+                            <div class="oe_kanban_details">
+                                <strong class="o_kanban_record_title">
+                                    <field name="patient_id"/>
+                                </strong>
+                                <div class="o_kanban_tags_section"/>
+                                <ul>
+                                    <li><strong>Patient Status : </strong>
+                                        <field name="patient_status"/>
+                                    </li>
+                                    <li><strong>Urgency Level : </strong>
+                                        <field name="urgency_level"/>
+                                    </li>
+                                    <li><strong>Physician : </strong>
+                                        <field name="doctor_id"/>
+                                    </li>
+                                    <li><strong>Health Center : </strong>
+                                        <field name="institution_partner_id"/>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="action_hospital_appointment" model="ir.actions.act_window">
+        <field name="name">Appointments</field>
+        <field name="res_model">hospital.appointment</field>
+        <field name="binding_view_types">form</field>
+        <field name="view_mode">tree,kanban,calendar,form,pivot,graph</field>
+    </record>
+
+    <record id="action_view_appointment_id_new" model="ir.actions.act_window">
+        <field name="name">Appointments</field>
+        <field name="res_model">hospital.appointment</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="domain">[('patient_id', '=', active_id)]</field>
+    </record>
+
+    <menuitem
+            id="menu_hospital_appointment"
+            action="action_hospital_appointment"
+            parent="timhergty_hospital.menu_appointment"
+            sequence="1"/>
+
+</odoo>
+

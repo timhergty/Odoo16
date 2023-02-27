@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record id="action_hospital_appointment" model="ir.actions.act_window">
+        <field name="name">Patient Appointments</field>
+        <field name="res_model">hospital.appointment</field>
+        <field name="view_mode">tree,kanban,calendar,form,pivot,graph</field>
+        <field name="view_id" ref="hospital_appointment_graph_view"/>
+    </record>
+    <record id="action_hospital_inpatient_registration" model="ir.actions.act_window">
+        <field name="name">Patient Hospitalization</field>
+        <field name="res_model">hospital.inpatient.registration</field>
+        <field name="view_mode">tree,kanban,form,pivot,graph</field>
+        <field name="view_id" ref="hospital_inpatient_registration_graph_view"/>
+    </record>
+
+    <record id="action_view_appointment_id_new" model="ir.actions.act_window">
+        <field name="name">Book Appointments</field>
+        <field name="res_model">hospital.appointment</field>
+        <field name="view_mode">calendar</field>
+        <field name="view_id" ref="hospital_appointment_calendar_view"/>
+    </record>
+
+    <record id="action_hospital_patient" model="ir.actions.act_window">
+        <field name="name">Patients</field>
+        <field name="res_model">hospital.patient</field>
+        <field name="view_mode">tree,kanban,form</field>
+    </record>
+
+    <record id="hospital_dashboard_form_view" model="ir.ui.view">
+        <field name="name">Dashboard Form</field>
+        <field name="model">board.board</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Dashboard">
+                <board style="1-2">
+                    <column>
+                        <action
+                            string="Patient Appointments"
+                            name="%(action_hospital_appointment)d"/>
+                        <action
+                            string="Patient Records"
+                            name="%(action_hospital_patient)d"/>
+                        <action
+                            string="Patient Hospitalization"
+                            name="%(action_hospital_inpatient_registration)d"/>
+                    </column>
+                    <column>
+                        <action
+                            string="Book Appointment"
+                            name="%(action_view_appointment_id_new)d"/>
+
+                    </column>
+                </board>
+            </form>
+        </field>
+    </record>
+
+    <record id="hospital_hospital_dashboard" model="ir.actions.act_window">
+        <field name="name">Dashboard</field>
+        <field name="res_model">board.board</field>
+        <field name="view_mode">form</field>
+        <field name="usage">menu</field>
+        <field name="view_id" ref="hospital_dashboard_form_view"/>
+    </record>
+
+    <menuitem
+        name="Dashboard"
+        parent="main_menu_hospital_management"
+        action="hospital_hospital_dashboard"
+        sequence="-1"
+        id="menu_dashboard"/>
+
+</odoo>
